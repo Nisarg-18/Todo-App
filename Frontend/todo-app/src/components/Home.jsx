@@ -1,10 +1,12 @@
 import { Box, Grid, Typography } from "@mui/material";
 import TodoCard from "./TodoCard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { allTodosState } from "../atoms/allTodosAtom";
 
 export default function Home() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useRecoilState(allTodosState);
 
   const getAllTodos = () => {
     axios.get("http://localhost:3000/allTodos").then((response) => {
@@ -16,6 +18,7 @@ export default function Home() {
   useEffect(() => {
     getAllTodos();
   }, []);
+
   return (
     <>
       <Box padding={2}>
@@ -26,6 +29,7 @@ export default function Home() {
           {todos.map((todo) => {
             return (
               <TodoCard
+                key={todo._id}
                 id={todo._id}
                 title={todo.title}
                 description={todo.description}
